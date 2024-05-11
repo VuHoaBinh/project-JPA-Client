@@ -38,7 +38,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-
 public class JPanel_LinhKien extends JPanel implements ActionListener, MouseListener {
 	/**
 	 * 
@@ -66,10 +65,11 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 
 	/**
 	 * Create the panel.
-	 * @throws RemoteException 
+	 * 
+	 * @throws RemoteException
 	 */
 	public JPanel_LinhKien() throws RemoteException {
-		
+
 		linhKien_DAO = ClientDAO.getLinhKien_DAO();
 /////////
 		loaiLinhKien_DAO = ClientDAO.getLoaiLinhKien_DAO();
@@ -93,7 +93,7 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 		panel.add(lblMaLinhKien);
 
 		txtMaLinhKien = new JTextField();
-		txtMaLinhKien.setEditable(false);
+		txtMaLinhKien.setEditable(true);
 		txtMaLinhKien.setBounds(171, 23, 366, 23);
 		panel.add(txtMaLinhKien);
 		txtMaLinhKien.setColumns(10);
@@ -228,7 +228,7 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 		btnXemChiTiet.setBounds(33, 600, 154, 45);
 		panel.add(btnXemChiTiet);
 
-		JButton btnThem = new FixButton("Thêm", "img/Thêm.png", 28, 22);
+		JButton btnThem = new FixButton("Thêm", "img/Them.png", 28, 22);
 		btnThem.setForeground(new Color(0, 0, 0));
 		btnThem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -250,6 +250,7 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 							JOptionPane.showMessageDialog(null, "Thêm linh kiện thất bại");
 					} catch (HeadlessException | RemoteException e1) {
 						// TODO Auto-generated catch block
+						JOptionPane.showMessageDialog(null, "Bị trùng");
 						e1.printStackTrace();
 					}
 				}
@@ -337,8 +338,8 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 		cBoBoxLoai = new JComboBox();
 
 		// thêm loại linh kiện từ db vô cbobox
-		ArrayList<entities.LoaiLinhKien> listLoaiLinhKien = loaiLinhKien_DAO.getAllLoaiLinhKien();
-		for (entities.LoaiLinhKien loaiLinhKien : listLoaiLinhKien) {
+		ArrayList<LoaiLinhKien> listLoaiLinhKien = loaiLinhKien_DAO.getAllLoaiLinhKien();
+		for (LoaiLinhKien loaiLinhKien : listLoaiLinhKien) {
 			cBoBoxLoai.addItem(loaiLinhKien.getTenLoaiLinhKien());
 		}
 
@@ -347,8 +348,8 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 
 		cBoBoxThuongHieu = new JComboBox();
 		// thêm thương hiệu từ db vô cbobox
-		ArrayList<entities.ThuongHieu> listThuongHieu = thuongHieu_DAO.getAllThuongHieu();
-		for (entities.ThuongHieu thuongHieu : listThuongHieu) {
+		ArrayList<ThuongHieu> listThuongHieu = thuongHieu_DAO.getAllThuongHieu();
+		for (ThuongHieu thuongHieu : listThuongHieu) {
 			cBoBoxThuongHieu.addItem(thuongHieu.getTenThuongHieu());
 		}
 
@@ -465,6 +466,11 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 
 	private boolean isValidLinhKien() {
 		// TODO Auto-generated method stub
+		if (!(txtMaLinhKien.getText().matches("^LK\\d{6}$"))) {
+			JOptionPane.showMessageDialog(null, "Mã linh kiện không được để trống hoặc LK + 6 ký tự số");
+			txtMaLinhKien.requestFocus();
+			return false;
+		}
 		if (txtTenLinhKien.getText().equals("")) {
 			JOptionPane.showMessageDialog(this, "Tên linh kiện không được để trống");
 			txtTenLinhKien.requestFocus();
@@ -494,6 +500,11 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 				double giaBan = Double.parseDouble(txtGiaBan.getText());
 				if (giaBan <= 0) {
 					JOptionPane.showMessageDialog(this, "Vui lòng nhập số nguyên dương");
+					txtGiaBan.requestFocus();
+					return false;
+				}
+				if (giaBan < Double.parseDouble(txtGiaNhap.getText())) {
+					JOptionPane.showMessageDialog(this, "Vui lòng gia nhap > gia ban");
 					txtGiaBan.requestFocus();
 					return false;
 				}
@@ -560,6 +571,15 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 			dataChooserNgayNhap.requestFocus();
 			return false;
 		}
+		Date currentDate = new Date();
+
+		Date selectedDate = dataChooserNgayNhap.getDate();
+
+		if (selectedDate.after(currentDate)) {
+		    JOptionPane.showMessageDialog(this, "Ngày nhập không được sau ngày hiện tại");
+		    dataChooserNgayNhap.requestFocus();
+		    return false;
+		}
 		return true;
 	}
 
@@ -580,7 +600,7 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 
 		String tenThuongHieu = cBoBoxThuongHieu.getSelectedItem().toString();
 		ThuongHieu thuongHieu = new ThuongHieu();
-		thuongHieu.setMaThuongHieu(thuongHieu_DAO.getMaThuongHieuTheoTen(tenThuongHieu));
+		thuongHieu.setMaThuongHieu(thuongHieu_DAO.getMaThuongHieuTheoTen(tenThuongHieu).getMaThuongHieu());
 		thuongHieu.setTenThuongHieu(tenThuongHieu);
 
 		// SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -628,6 +648,7 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 		txtBaoHanh.setText("");
 		cBoBoxThuongHieu.setSelectedIndex(0);
 		dataChooserNgayNhap.setDate(null);
+		txtMaLinhKien.setEditable(true);
 		;
 	}
 
@@ -645,6 +666,7 @@ public class JPanel_LinhKien extends JPanel implements ActionListener, MouseList
 		cBoBoxThuongHieu.setSelectedItem(modelQuanLyLinhKien.getValueAt(row, 7));
 		dataChooserNgayNhap.setDate((Date) modelQuanLyLinhKien.getValueAt(row, 8));
 		txtBaoHanh.setText(modelQuanLyLinhKien.getValueAt(row, 9).toString());
+		txtMaLinhKien.setEditable(false);
 	}
 
 	@Override

@@ -9,11 +9,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 
+import javax.swing.AbstractButton;
 import javax.swing.Box;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -24,35 +29,15 @@ import javax.swing.JTextField;
 import dao.TaiKhoan_DAO;
 import entities.TaiKhoan;
 import utils.ClientDAO;
+import java.awt.Component;
+import java.awt.SystemColor;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.net.MalformedURLException;
-import java.rmi.NotBoundException;
-import java.rmi.RemoteException;
-import javax.swing.SwingConstants;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-public class Frm_DangNhap extends JFrame implements ActionListener {
+public class Frm_DoiMatKhau extends JFrame implements ActionListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JLabel lblTop;
-	private JTextField txtTenDangNhap;
-	private JPasswordField txtMatKhau;
-	private JComboBox comboQuyenTruyCap;
-	private JCheckBox checkNhoMK;
-	private JButton btn_DangNhap;
-	private JButton btn_Thoat;
-	private JButton btn_TaoTK;
-	private Frm_TrangChu tC;
-	private Frm_DoiMatKhau formQuenMatKhau;
-	private TaiKhoan_DAO taiKhoan_DAO;
-	private JButton lblDoiMK;
 
 	/**
 	 * Launch the application.
@@ -61,7 +46,7 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Frm_DangNhap frame = new Frm_DangNhap();
+					Frm_DoiMatKhau frame = new Frm_DoiMatKhau();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,6 +55,15 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 		});
 	}
 
+	private TaiKhoan_DAO taiKhoan_DAO;
+	private JLabel lblTop;
+	private JPasswordField txtMatkhauConfirm;
+	private JTextField txtTendangNhap;
+	private JPasswordField txtMatkhau;
+	private AbstractButton btn_DangNhap;
+	private FixButton btn_Thoat;
+	private Frm_DangNhap tC;
+
 	/**
 	 * Create the frame.
 	 * 
@@ -77,8 +71,8 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 	 * @throws RemoteException
 	 * @throws MalformedURLException
 	 */
-	public Frm_DangNhap() throws MalformedURLException, RemoteException, NotBoundException {
-		setTitle("Đăng nhập hệ thống");
+	public Frm_DoiMatKhau() throws MalformedURLException, RemoteException, NotBoundException {
+		setTitle("Quên mật khẩu");
 		setSize(400, 300);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLocationRelativeTo(null);
@@ -91,7 +85,7 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 		// TOP:
 		JPanel pnl_top = new JPanel();
 		getContentPane().add(pnl_top, BorderLayout.NORTH);
-		pnl_top.add(lblTop = new JLabel("Đăng Nhập Hệ Thống"));
+		pnl_top.add(lblTop = new JLabel("Quên mật khẩu"));
 		lblTop.setForeground(Color.red);
 		Font font_lbl = new Font("Arial", Font.BOLD, 25);
 		lblTop.setFont(font_lbl);
@@ -103,7 +97,7 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 		Box b, b1, b2, b3, b5;
 		pnl_mid.setLayout(null);
 		b = Box.createVerticalBox();
-		b.setBounds(37, 27, 302, 118);
+		b.setBounds(37, 21, 320, 171);
 		b1 = Box.createHorizontalBox();
 		b2 = Box.createHorizontalBox();
 		b3 = Box.createHorizontalBox();
@@ -114,6 +108,18 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 		b.add(Box.createVerticalStrut(5));
 		b.add(b3);
 		b.add(Box.createVerticalStrut(5));
+
+		Box b2_1 = Box.createHorizontalBox();
+		b.add(b2_1);
+
+		JLabel lblMatKhauConfirm = new JLabel("Nhập lại mật khẩu: ");
+		b2_1.add(lblMatKhauConfirm);
+
+		Component horizontalStrut = Box.createHorizontalStrut(40);
+		b2_1.add(horizontalStrut);
+
+		txtMatkhauConfirm = new JPasswordField(20);
+		b2_1.add(txtMatkhauConfirm);
 		b.add(b5);
 		b.add(Box.createVerticalStrut(10));
 		pnl_mid.add(b);
@@ -122,13 +128,14 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 		b1.add(lblTenDangNhap = new JLabel("Tên Đăng Nhập: "));
 		b1.add(Box.createHorizontalStrut(50));
 //		b1.add(Box.createHorizontalGlue());
-		b1.add(txtTenDangNhap = new JTextField(20));
+		b1.add(txtTendangNhap = new JTextField(20));
 
 		b2.add(lblMatKhau = new JLabel("Mật Khẩu: "));
-		b2.add(Box.createHorizontalStrut(84));
-		b2.add(txtMatKhau = new JPasswordField(20));
+		b2.add(Box.createHorizontalStrut(80));
+		b2.add(txtMatkhau = new JPasswordField(20));
 
 		b5.add(btn_DangNhap = new FixButton("Đăng Nhập", "img/dangnhap.png", 28, 22));
+		btn_DangNhap.setText("Đổi mật khẩu");
 		btn_DangNhap.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
@@ -143,7 +150,7 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 				}
 			}
 		});
-		txtMatKhau.addKeyListener(new KeyAdapter() {
+		txtMatkhau.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -157,7 +164,7 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 				}
 			}
 		});
-		btn_DangNhap.setBackground(Color.green);
+		btn_DangNhap.setBackground(SystemColor.textHighlight);
 		btn_DangNhap.setForeground(Color.white);
 		b5.add(Box.createRigidArea(new Dimension(50, 0)));
 		b5.add(btn_Thoat = new FixButton("Thoát", "img/thoathethong.png", 28, 22));
@@ -167,27 +174,7 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 				System.exit(0);
 			}
 		});
-		lblDoiMK = new JButton("Quên mật khẩu");
-		lblDoiMK.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				try {
-					formQuenMatKhau = new Frm_DoiMatKhau();
-				} catch (MalformedURLException | RemoteException | NotBoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				formQuenMatKhau.setVisible(true);
-			}
-		});
-		lblDoiMK.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				System.out.println("Quên mật khẩu");
-			}
-		});
-		lblDoiMK.setBounds(129, 168, 129, 21);
-		pnl_mid.add(lblDoiMK);
+		btn_Thoat.setText("Quay lại");
 		btn_Thoat.setBackground(Color.red);
 		btn_Thoat.setForeground(Color.white);
 
@@ -216,32 +203,24 @@ public class Frm_DangNhap extends JFrame implements ActionListener {
 			}
 
 		}
-		if (o == lblDoiMK) {
-			try {
-				this.hide();
-				formQuenMatKhau = new Frm_DoiMatKhau();
-				formQuenMatKhau.setVisible(true);
-			} catch (RemoteException | MalformedURLException | NotBoundException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-		}
+
 	}
 
 	public void dangNhap() throws RemoteException {
-		String tenDangNhap = txtTenDangNhap.getText();
-		String matKhau = txtMatKhau.getText();
+		String tenDangNhap = txtTendangNhap.getText();
+		String matKhau = txtMatkhau.getText();
 		System.out.println("tk: " + tenDangNhap + " mat khau: " + matKhau);
 
 		try {
 			TaiKhoan_DAO taiKhoan_DAO = ClientDAO.getTaiKhoanDAO();
-			TaiKhoan tk = taiKhoan_DAO.getTaiKhoanTuTenDangNhap(tenDangNhap, matKhau);
-			if (tk != null) {
+			TaiKhoan tk1 = new TaiKhoan(tenDangNhap,matKhau);
+			Boolean tk = taiKhoan_DAO.doiMatKhau(tenDangNhap,matKhau);
+			if (tk != false) {
 				this.hide();
-				tC = new Frm_TrangChu(tk.getNhanVien());
+				tC = new Frm_DangNhap();
 				tC.setVisible(true);
 			} else {
-				JOptionPane.showMessageDialog(null, "Sai tên đăng nhập hoặc mật khẩu");
+				JOptionPane.showMessageDialog(null, "Sai tên đăng nhập "+tk);
 			}
 
 		} catch (Exception e2) {

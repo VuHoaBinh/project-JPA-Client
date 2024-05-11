@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -85,7 +86,6 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 	private JPanel_KhachHang kH;
 	private JPanel_LinhKien lK;
 	private JPanel_NhanVien nV;
-	private JPanel_ThongKe tK;
 	private Frm_DangNhap dN;
 	private JPanel pnlDangXuat;
 	private JPanel pnlJPanelTrangChu;
@@ -114,6 +114,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 	private static JTextField txtMaHoaDon;
 	private JButton btnThanhToan;
 	private Frm_ChiTietLinhKien chiTietLinhKien;
+	private Frm_XemThongTinCaNhan xemThongTinCaNhan;
 	private JButton lamMoiDanhSach;
 	private JPanel pnlTHongKe;
 	private Object img;
@@ -126,11 +127,11 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 	 * @throws NotBoundException
 	 * @throws MalformedURLException
 	 */
+	
 	public Frm_TrangChu(NhanVien nhanVien) throws RemoteException, MalformedURLException, NotBoundException {
-
+		
 		try {
 //			ConnectDB.getInstance().connect();
-///////
 			linhKien_DAO = ClientDAO.getLinhKien_DAO();
 			System.out.println("Ket noi thanh cong");
 		} catch (Exception e) {
@@ -164,9 +165,6 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 		nV.setSize(1226, 656);
 		nV.setVisible(false);
 		dN = new Frm_DangNhap();
-		tK = new JPanel_ThongKe();
-		tK.setSize(1226, 656);
-		tK.setVisible(false);
 
 		JPanel pnlTrangChu = new JPanel();
 		pnlTrangChu.addMouseListener(new MouseAdapter() {
@@ -177,7 +175,6 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 				hD.setVisible(false);
 				lK.setVisible(false);
 				pnlJPanelTrangChu.setVisible(true);
-				tK.setVisible(false);
 			}
 		});
 
@@ -240,7 +237,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 					hD.setVisible(false);
 					lK.setVisible(false);
 					pnlJPanelTrangChu.setVisible(false);
-					tK.setVisible(false);
+			
 				} else {
 					JOptionPane.showMessageDialog(null, "Chỉ nhân viên quản lý có quyền xem!");
 				}
@@ -305,7 +302,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 				lK.setVisible(false);
 				nV.setVisible(false);
 				pnlJPanelTrangChu.setVisible(false);
-				tK.setVisible(false);
+			
 			}
 		});
 		pnlKhachHang.setLayout(null);
@@ -364,7 +361,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 				lK.setVisible(false);
 				nV.setVisible(false);
 				pnlJPanelTrangChu.setVisible(false);
-				tK.setVisible(false);
+		
 			}
 		});
 		pnlHoaDon.setLayout(null);
@@ -425,7 +422,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 					kH.setVisible(false);
 					nV.setVisible(false);
 					pnlJPanelTrangChu.setVisible(false);
-					tK.setVisible(false);
+					
 				} else
 					JOptionPane.showMessageDialog(null, "Chỉ nhân viên quản lý có quyền xem!");
 			}
@@ -484,12 +481,6 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 		pnlTroGiup.setBackground(new Color(0, 187, 187));
 		pnlTroGiup.setBounds(0, 454, 226, 50);
 		pnlChucNang.add(pnlTroGiup);
-
-		JLabel lblTrGiup = new JLabel("TRỢ GIÚP");
-		lblTrGiup.setHorizontalAlignment(SwingConstants.CENTER);
-		lblTrGiup.setForeground(new Color(0, 0, 0));
-		lblTrGiup.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblTrGiup.setBounds(0, 0, 226, 50);
 		String imgPath = "img/trogiup.png";
 		int desiredWidth = 28; // Đặt chiều rộng mong muốn
 		int desiredHeight = 22; // Đặt chiều cao mong muốn
@@ -512,15 +503,11 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 			}
 
 			Image scaledImage = originalImage.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
-
-			// Đặt hình ảnh vào JLabel
-			lblTrGiup.setIcon(new ImageIcon(scaledImage));
 		} catch (IOException e) {
 			e.printStackTrace();
 			// Xử lý lỗi, ví dụ: Hiển thị thông báo hoặc thực hiện các hành động khác tùy
 			// thuộc vào nhu cầu của bạn
 		}
-		pnlTroGiup.add(lblTrGiup);
 
 		pnlDangXuat = new JPanel();
 		pnlDangXuat.addMouseListener(new MouseAdapter() {
@@ -632,7 +619,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 					kH.setVisible(false);
 					nV.setVisible(false);
 					pnlJPanelTrangChu.setVisible(false);
-					tK.setVisible(true);
+			
 				} else
 					JOptionPane.showMessageDialog(null, "Chỉ nhân viên quản lý có quyền xem!");
 			}
@@ -641,12 +628,6 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 		pnlTHongKe.setBackground(new Color(0, 187, 187));
 		pnlTHongKe.setBounds(0, 405, 226, 50);
 		pnlChucNang.add(pnlTHongKe);
-
-		JLabel lblThongKe = new JLabel("THỐNG KÊ");
-		lblThongKe.setHorizontalAlignment(SwingConstants.CENTER);
-		lblThongKe.setForeground(Color.BLACK);
-		lblThongKe.setFont(new Font("Times New Roman", Font.BOLD, 16));
-		lblThongKe.setBounds(0, 0, 226, 50);
 		String imgTK = "img/thongke.png";
 		int setRongiconTK = 28; // Đặt chiều rộng mong muốn
 		int setDaiiconTK = 22; // Đặt chiều cao mong muốn
@@ -669,11 +650,9 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 			}
 
 			Image scaledImage = originalImage.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
-			lblThongKe.setIcon(new ImageIcon(scaledImage));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		pnlTHongKe.add(lblThongKe);
 
 		JPanel panel_2 = new JPanel();
 		panel_2.setBounds(10, 619, 206, 2);
@@ -685,7 +664,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 		pnlView.add(kH);
 		pnlView.add(lK);
 		pnlView.add(nV);
-		pnlView.add(tK);
+	
 		contentPane.add(pnlView);
 		pnlView.setLayout(null);
 
@@ -770,6 +749,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 						String maLK = tableDanhSachLinhKien.getValueAt(row, 0).toString();
 						String soLuongLK = JOptionPane.showInputDialog(null, "Nhập số lượng cho " + maLK + ":");
 						Integer soLuongInt = Integer.parseInt(soLuongLK);
+						System.out.println(soLuongInt);
 						String soLuongTon = tableDanhSachLinhKien.getValueAt(row, 4).toString();
 						Integer soLuongTon1 = Integer.parseInt(soLuongTon);
 
@@ -795,6 +775,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 												Double currentDonGia = Double.parseDouble(modelDanhSachGioHang
 														.getValueAt(i, 6).toString().replace(",", ""));
 												String dfTotalAmount = df.format(tienMoi + currentDonGia);
+												
 												modelDanhSachGioHang.setValueAt(dfTotalAmount, i, 6);
 
 												kiemTra = true;
@@ -1125,6 +1106,24 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 		pnlTaiKhoan.setBackground(new Color(229, 229, 229));
 		pnlTaiKhoan.setLayout(null);
 		JLabel lbltaikhoan = new JLabel();
+		lbltaikhoan.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					xemThongTinCaNhan = new Frm_XemThongTinCaNhan(nhanVien);
+				} catch (MalformedURLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (NotBoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				xemThongTinCaNhan.setVisible(true);
+			}
+		});
 		lbltaikhoan.setText(nhanVien.getTenNhanVien());
 		lbltaikhoan.setBounds(0, 0, 200, 24);
 		pnlTaiKhoan.add(lbltaikhoan);
@@ -1372,8 +1371,9 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 							String maHoaDon = txtMaHoaDon.getText();
 							String maKH = txtMaKH.getText();
 							String maNV = txtMaNV.getText();
+							String tenKH = txtTenKhachHang.getText();
 							float thue = 10;
-							KhachHang kh = new KhachHang(maKH);
+							KhachHang kh = new KhachHang(maKH, tenKH);
 							HoaDon hd = new HoaDon(maHoaDon, kh, nhanVien,
 									Date.valueOf(DATE_FORMAT_SQL.format(dataChooserNgayLapHoaDon.getDate())), thue);
 ///////
@@ -1398,7 +1398,7 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 
 							for (ChiTietHoaDon ct : cthdlist) {
 								cthd_dao.themChiTietHoaDon(ct);
-								cthd_dao.updateSoLuongTon(ct);
+//								cthd_dao.updateSoLuongTon(ct);
 							}
 							DefaultTableModel dm = (DefaultTableModel) tableDanhSachLinhKien.getModel();
 							int rowCount1 = dm.getRowCount();
@@ -1462,8 +1462,10 @@ public class Frm_TrangChu extends JFrame implements ActionListener, MouseListene
 							ChiTietHoaDon_DAO cthd_dao = ClientDAO.getChiTietHoaDon_DAO();
 
 							for (ChiTietHoaDon ct : cthdlist) {
+								
 								cthd_dao.themChiTietHoaDon(ct);
-								cthd_dao.updateSoLuongTon(ct);
+								LinhKien lk = new LinhKien(ct.getLinhKien().getMaLinhKien(), ct.getLinhKien().getSoLuong());
+								Boolean check = cthd_dao.updateSoLuongTon(lk, ct.getSoLuong());
 							}
 							DefaultTableModel dm = (DefaultTableModel) tableDanhSachLinhKien.getModel();
 							int rowCount1 = dm.getRowCount();

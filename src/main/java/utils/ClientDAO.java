@@ -14,7 +14,7 @@ import dao.ThongKe_DAO;
 import dao.ThuongHieu_DAO;
 
 public class ClientDAO {
-	private static final String URL = "rmi://127.0.0.1:2003/";
+	private static final String URL = "rmi://192.168.43.152:2004/";
 
 	public static TaiKhoan_DAO getTaiKhoanDAO() {
 		try {

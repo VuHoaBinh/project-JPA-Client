@@ -88,6 +88,11 @@ public class JPanel_HoaDon extends JPanel {
 		String[] header = { "Mã hóa đơn", "Mã khách hàng", "Tên khách hàng", "Mã nhân viên", "Tên nhân viên",
 				"Ngày lập hóa đơn", "Tổng tiền" };
 		modelQuanLyHoaDon = new DefaultTableModel(header, 0) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -1832772833668816362L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// TODO Auto-generated method stub
@@ -157,20 +162,12 @@ public class JPanel_HoaDon extends JPanel {
 				String maKH = tableQuanLyHoaDon.getModel().getValueAt(row, 1).toString();
 				String maNV = tableQuanLyHoaDon.getModel().getValueAt(row, 2).toString();
 ///////
-				KhachHang_DAO kh_dao = ClientDAO.getKhachHangDAO();
-				KhachHang kh = null;
-				try {
-					kh = kh_dao.searchMaKhachHang(maKH);
-				} catch (RemoteException e2) {
-					// TODO Auto-generated catch block
-					e2.printStackTrace();
-				}
-				String tenKH = kh.getTenKhachHang();
-				ArrayList<ChiTietHoaDon> dsCTHD;
+
+				List<ChiTietHoaDon> dsCTHD;
 				try {
 //////////
 					ChiTietHoaDon_DAO cthd_dao = ClientDAO.getChiTietHoaDon_DAO();
-					dsCTHD = cthd_dao.timTheoMaCTHD(maHD);
+					dsCTHD = cthd_dao.findMaCTHD(maHD);
 					for (ChiTietHoaDon cthd : dsCTHD) {
 						DecimalFormat df = new DecimalFormat("###,###");
 						int soLuong = cthd.getSoLuong();
@@ -270,7 +267,7 @@ public class JPanel_HoaDon extends JPanel {
 					ChiTietHoaDon_DAO cthd_dao = ClientDAO.getChiTietHoaDon_DAO();
 
 					for (HoaDon hd : list) {
-						ArrayList<ChiTietHoaDon> chiTietHoaDons = cthd_dao.timTheoMaCTHD(str);
+						List<ChiTietHoaDon> chiTietHoaDons = cthd_dao.findMaCTHD(str);
 						hd.setListChiTietHoaDon(chiTietHoaDons);
 						tongTien = hd.tinhTongTien();
 						String tongTien1 = df.format(tongTien);
@@ -278,6 +275,7 @@ public class JPanel_HoaDon extends JPanel {
 								hd.getKhachHang().getTenKhachHang(), hd.getNhanVien().getMaNhanVien(),
 								hd.getNhanVien().getTenNhanVien(), hd.getNgayLap(), tongTien1 };
 						modelQuanLyHoaDon.addRow(obj);
+
 					}
 				}
 			} catch (Exception e) {
@@ -298,7 +296,7 @@ public class JPanel_HoaDon extends JPanel {
 			DecimalFormat df = new DecimalFormat("###,###");
 			double tongTien = 0;
 			for (HoaDon hoadon : listHoaDon) {
-				ArrayList<ChiTietHoaDon> chiTietHoaDons = cthd_dao.timTheoMaCTHD(hoadon.getMaHoaDon());
+				List<ChiTietHoaDon> chiTietHoaDons = cthd_dao.findMaCTHD(hoadon.getMaHoaDon());
 				hoadon.setListChiTietHoaDon(chiTietHoaDons);
 				tongTien = hoadon.tinhTongTien();
 				String tongTien1 = df.format(tongTien);
@@ -306,6 +304,7 @@ public class JPanel_HoaDon extends JPanel {
 						hoadon.getKhachHang().getTenKhachHang(), hoadon.getNhanVien().getMaNhanVien(),
 						hoadon.getNhanVien().getTenNhanVien(), hoadon.getNgayLap(), tongTien1 };
 				modelQuanLyHoaDon.addRow(obj);
+				System.out.println("===============================" + hoadon.getKhachHang().getTenKhachHang());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
