@@ -1,9 +1,9 @@
 <project xmlns="https://maven.apache.org/POM/4.0.0" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>QLBanHang_Client</groupId>
-  <artifactId>QLBanHang_Client</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-   <dependencies>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>QLBanHang_Client</groupId>
+	<artifactId>QLBanHang_Client</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<dependencies>
 		<!-- https://mvnrepository.com/artifact/jakarta.persistence/jakarta.persistence-api -->
 		<dependency>
 			<groupId>jakarta.persistence</groupId>
@@ -36,14 +36,9 @@
 			<version>2.2.224</version>
 		</dependency>
 		<dependency>
-			<groupId>QLBanHang</groupId>
-			<artifactId>QLBanHang</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+			<version>2.14.1</version>
 		</dependency>
-		<dependency>
-			<groupId>QLLinhKIen</groupId>
-			<artifactId>QLLinhKIen</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-   </dependencies>
+	</dependencies>
 </project>
